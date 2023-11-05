@@ -3,7 +3,7 @@
 ## Usage
 
 ```bash
-poetry install
+pip install -e '.[dev]'
 webtoon-downloader --help
 ```
 

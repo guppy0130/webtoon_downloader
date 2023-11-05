@@ -1,10 +1,8 @@
-[tool.poetry]
+[project]
 name = "webtoon_downloader"
-version = "0.1.0"
 description = "Downloads webtoons"
-authors = ["Nick Yang <guppy0130@users.noreply.github.com>"]
-license = "MIT"
-readme = "README.md"
+dynamic = ["version", "readme"]
+license = { text = "MIT License" }
 keywords = ["webtoon"]
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -12,31 +10,41 @@ classifiers = [
   "License: OSI Approved :: MIT License",
 ]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-requests = "^2.28.1"
-beautifulsoup4 = "^4.11.1"
-rich = "^12.6.0"
-Pillow = "^9.3.0"
-lxml = "^4.9.2"
-typer = "^0.7.0"
+dependencies = [
+  "requests>=2.28.1",
+  "beautifulsoup4>=4.11.1",
+  "rich>=12.6.0",
+  "Pillow>=9.3.0",
+  "lxml>=4.9.2",
+  "typer>=0.7.0",
+]
 
-[tool.poetry.group.dev.dependencies]
-black = "^22.12.0"
-flake8 = "^6.0.0"
-pre-commit = "^2.20.0"
-isort = "^5.11.3"
-flake8-bugbear = "^22.12.6"
-flake8-comprehensions = "^3.10.1"
-flake8-simplify = "^0.19.3"
-flake8-builtins = "^2.0.1"
+[[project.authors]]
+name = "Nick Yang"
+email = "guppy0130@users.noreply.github.com"
 
-[tool.poetry.scripts]
+[project.optional-dependencies]
+dev = [
+  "black>=22.12.0",
+  "flake8>=6.0.0",
+  "pre-commit>=2.20.0",
+  "isort>=5.11.3",
+  "flake8-bugbear>=22.12.6",
+  "flake8-comprehensions>=3.10.1",
+  "flake8-simplify>=0.19.3",
+  "flake8-builtins>=2.0.1",
+]
+
+[project.scripts]
 webtoon-downloader = "webtoon_downloader.cli:app"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools", "setuptools_scm[toml]"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic.readme]
+file = "README.md"
+content-type = "text/markdown"
 
 [tool.isort]
 profile = "black"
@@ -44,3 +52,5 @@ line_length = 79
 
 [tool.black]
 line-length = 79
+
+[tool.setuptools_scm]
