@@ -5,7 +5,15 @@ import os
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional, Set
-from urllib.parse import parse_qs, urlencode, urljoin, urlparse, urlunparse
+from urllib import request
+from urllib.parse import (
+    parse_qs,
+    parse_qsl,
+    urlencode,
+    urljoin,
+    urlparse,
+    urlunparse,
+)
 from zipfile import ZipFile
 
 import requests
@@ -132,6 +140,28 @@ def get_all_chapter_sets(
                     )
                 )
             elif page["href"] == "#":
+                # for some reason, the condition above and below no longer get
+                # the first page, but this will, so
+                urlparse_res = urlparse(url)
+                qs = dict(parse_qsl(urlparse_res.query))
+                qs["page"] = page.text
+                _url = urlunparse(
+                    [
+                        urlparse_res.scheme,
+                        urlparse_res.netloc,
+                        urlparse_res.path,
+                        urlparse_res.params,
+                        urlencode(qs),
+                        urlparse_res.fragment,
+                    ]
+                )
+                # need to ensure it exists
+                if request.urlopen(_url).status == 200:
+                    # this one will be the full URL instead of just everything
+                    # after netloc due to the fact we're too lazy to remove
+                    # scheme and netloc from this string. it resolved above
+                    # anyways, so it's probably ok.
+                    urls.add(_url)
                 continue
             else:
                 progress.update(task_id=task_id, advance=1, refresh=True)
